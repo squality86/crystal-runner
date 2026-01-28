@@ -2,6 +2,7 @@
 import { ReactNode, useState } from "react";
 import { base } from "wagmi/chains";
 import { createConfig, http, WagmiProvider } from "wagmi";
+import { injected } from "wagmi/connectors";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { farcasterMiniApp } from "@farcaster/miniapp-wagmi-connector";
 import { MiniAppProvider } from "./providers/MiniAppProvider";
@@ -9,7 +10,7 @@ import { MiniAppProvider } from "./providers/MiniAppProvider";
 const config = createConfig({
   chains: [base],
   transports: { [base.id]: http() },
-  connectors: [farcasterMiniApp()],
+  connectors: [farcasterMiniApp(), injected({ shimDisconnect: true })],
 });
 
 export function Providers({ children }: { children: ReactNode }) {
