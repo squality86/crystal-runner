@@ -61,6 +61,7 @@ export default function Home() {
   const [lastTxHash, setLastTxHash] = useState<string | null>(null);
 
   const directionRef = useRef(direction);
+  const runnerRef = useRef(runner);
   const crystalsRef = useRef(crystals);
   const txQueueRef = useRef(Promise.resolve());
   const touchStartRef = useRef<Point | null>(null);
@@ -69,6 +70,10 @@ export default function Home() {
   useEffect(() => {
     directionRef.current = direction;
   }, [direction]);
+
+  useEffect(() => {
+    runnerRef.current = runner;
+  }, [runner]);
 
   useEffect(() => {
     crystalsRef.current = crystals;
@@ -165,7 +170,8 @@ export default function Home() {
       const taken = new Set(
         nextCrystals.map((crystal) => `${crystal.x}-${crystal.y}`)
       );
-      taken.add(`${runner.x}-${runner.y}`);
+      const runnerPosition = runnerRef.current;
+      taken.add(`${runnerPosition.x}-${runnerPosition.y}`);
 
       for (let i = 0; i < spawnCount; i += 1) {
         let attempts = 0;
@@ -185,7 +191,7 @@ export default function Home() {
 
       return nextCrystals;
     });
-  }, [runner.x, runner.y]);
+  }, []);
 
   useEffect(() => {
     if (!hasStarted) {
