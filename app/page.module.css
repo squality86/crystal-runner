@@ -142,6 +142,13 @@
 
 .crystal {
   position: absolute;
+  padding: 6px;
+}
+
+.crystalCore {
+  display: block;
+  width: 100%;
+  height: 100%;
   border-radius: 12px;
   background: radial-gradient(circle at 30% 30%, #ffffff, #7aa9ff 55%, #3767ff 100%);
   box-shadow: 0 0 14px rgba(104, 142, 255, 0.7);

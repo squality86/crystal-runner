@@ -409,7 +409,9 @@ export default function Home() {
               height: cellSize,
               transform: `translate(${crystal.x * 100}%, ${crystal.y * 100}%)`,
             }}
-          />
+          >
+            <span className={styles.crystalCore} />
+          </div>
         ))}
 
         {!hasStarted && (
