@@ -227,7 +227,9 @@ export default function Home() {
 
         if (hitIndex >= 0) {
           setCrystals((prev) =>
-            prev.filter((crystal) => crystal.id !== crystalsRef.current[hitIndex].id)
+            prev.filter(
+              (crystal) => crystal.x !== next.x || crystal.y !== next.y
+            )
           );
           setScore((prev) => prev + 1);
           triggerFlash();
