@@ -1,7 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useAccount, useConnect, useSendTransaction } from "wagmi";
+import {
+  useAccount,
+  useChainId,
+  useConnect,
+  useSendTransaction,
+  useSwitchChain,
+} from "wagmi";
 import { base } from "wagmi/chains";
 import { useMiniApp } from "./providers/MiniAppProvider";
 import styles from "./page.module.css";
@@ -68,8 +74,10 @@ const addRandomCrystal = (
 export default function Home() {
   const { context, isReady } = useMiniApp();
   const { address, isConnected } = useAccount();
+  const chainId = useChainId();
   const { connect, connectors, isPending: isConnecting } = useConnect();
   const { sendTransactionAsync } = useSendTransaction();
+  const { switchChainAsync } = useSwitchChain();
 
   const [runner, setRunner] = useState<Point>({
     x: getCenter(),
@@ -109,6 +117,8 @@ export default function Home() {
   useEffect(() => {
     if (!isConnected) {
       setStatus("Connect wallet to record onchain.");
+    } else if (!isReady) {
+      setStatus("Browser wallet connected. Confirm each transaction.");
     } else if (pendingTxCount > 0) {
       setStatus(`Recording onchain (${pendingTxCount})...`);
     } else if (lastTxHash) {
@@ -164,24 +174,29 @@ export default function Home() {
 
     setPendingTxCount((current) => current + 1);
     txQueueRef.current = txQueueRef.current
-      .then(() =>
-        sendTransactionAsync({
+      .then(async () => {
+        if (chainId !== base.id && switchChainAsync) {
+          setStatus("Switching to Base...");
+          await switchChainAsync({ chainId: base.id });
+        }
+
+        return sendTransactionAsync({
           to,
           value: 0n,
           chainId: base.id,
-        })
-      )
+        });
+      })
       .then((hash) => {
         setLastTxHash(hash);
       })
       .catch((error) => {
         console.error("Crystal tx failed", error);
-        setStatus("Onchain proof failed. Tap again to retry.");
+        setStatus("Transaction failed or rejected. Tap again to retry.");
       })
       .finally(() => {
         setPendingTxCount((current) => Math.max(0, current - 1));
       });
-  }, [address, isConnected, sendTransactionAsync]);
+  }, [address, chainId, isConnected, sendTransactionAsync, switchChainAsync]);
 
   const spawnCrystals = useCallback(() => {
     setCrystals((current) => {
