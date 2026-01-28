@@ -35,8 +35,35 @@ const directionVectors: Record<Direction, Point> = {
 const getCenter = () =>
   Math.floor(GAME_CONFIG.gridSize / 2);
 
-const makeId = () =>
-  Math.random().toString(36).slice(2, 10);
+const makeId = () => Math.random().toString(36).slice(2, 10);
+
+const addRandomCrystal = (
+  current: Crystal[],
+  runnerPosition: Point,
+  count: number
+) => {
+  const taken = new Set(current.map((crystal) => `${crystal.x}-${crystal.y}`));
+  taken.add(`${runnerPosition.x}-${runnerPosition.y}`);
+  const nextCrystals = [...current];
+
+  for (let i = 0; i < count; i += 1) {
+    let attempts = 0;
+    while (attempts < 24) {
+      const x = Math.floor(Math.random() * GAME_CONFIG.gridSize);
+      const y = Math.floor(Math.random() * GAME_CONFIG.gridSize);
+      const key = `${x}-${y}`;
+      attempts += 1;
+
+      if (!taken.has(key)) {
+        taken.add(key);
+        nextCrystals.push({ x, y, id: makeId() });
+        break;
+      }
+    }
+  }
+
+  return nextCrystals;
+};
 
 export default function Home() {
   const { context, isReady } = useMiniApp();
@@ -166,30 +193,7 @@ export default function Home() {
         GAME_CONFIG.spawnBurstMax,
         GAME_CONFIG.maxCrystals - current.length
       );
-      const nextCrystals = [...current];
-      const taken = new Set(
-        nextCrystals.map((crystal) => `${crystal.x}-${crystal.y}`)
-      );
-      const runnerPosition = runnerRef.current;
-      taken.add(`${runnerPosition.x}-${runnerPosition.y}`);
-
-      for (let i = 0; i < spawnCount; i += 1) {
-        let attempts = 0;
-        while (attempts < 24) {
-          const x = Math.floor(Math.random() * GAME_CONFIG.gridSize);
-          const y = Math.floor(Math.random() * GAME_CONFIG.gridSize);
-          const key = `${x}-${y}`;
-          attempts += 1;
-
-          if (!taken.has(key)) {
-            taken.add(key);
-            nextCrystals.push({ x, y, id: makeId() });
-            break;
-          }
-        }
-      }
-
-      return nextCrystals;
+      return addRandomCrystal(current, runnerRef.current, spawnCount);
     });
   }, []);
 
@@ -227,8 +231,12 @@ export default function Home() {
 
         if (hitIndex >= 0) {
           setCrystals((prev) =>
-            prev.filter(
-              (crystal) => crystal.x !== next.x || crystal.y !== next.y
+            addRandomCrystal(
+              prev.filter(
+                (crystal) => crystal.x !== next.x || crystal.y !== next.y
+              ),
+              next,
+              1
             )
           );
           setScore((prev) => prev + 1);
