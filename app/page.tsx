@@ -284,10 +284,10 @@ export default function Home() {
 
         return next;
       });
-    }, GAME_CONFIG.moveIntervalMs);
+    }, moveIntervalMs);
 
     return () => window.clearInterval(interval);
-  }, [enqueueCrystalTx, isRunning, triggerFlash]);
+  }, [enqueueCrystalTx, isRunning, moveIntervalMs, triggerFlash]);
 
   useEffect(() => {
     if (!isRunning) {
@@ -382,6 +382,11 @@ export default function Home() {
   const timeProgress = useMemo(
     () => (timeLeft / GAME_CONFIG.roundSeconds) * 100,
     [timeLeft]
+  );
+
+  const moveIntervalMs = useMemo(
+    () => Math.max(120, GAME_CONFIG.moveIntervalMs - score * 6),
+    [score]
   );
 
   const cellSize = useMemo(
