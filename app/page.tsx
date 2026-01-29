@@ -97,9 +97,6 @@ export default function Home() {
   const [pendingTxCount, setPendingTxCount] = useState(0);
   const [lastTxHash, setLastTxHash] = useState<string | null>(null);
 
-  const moveIntervalMs = Math.max(120, GAME_CONFIG.moveIntervalMs - score * 6);
-  const speedMultiplier = GAME_CONFIG.moveIntervalMs / moveIntervalMs;
-
   const directionRef = useRef(direction);
   const runnerRef = useRef(runner);
   const crystalsRef = useRef(crystals);
@@ -255,6 +252,7 @@ export default function Home() {
       return;
     }
 
+    const intervalMs = Math.max(120, GAME_CONFIG.moveIntervalMs - score * 6);
     const interval = window.setInterval(() => {
       setRunner((current) => {
         const vector = directionRef.current;
@@ -291,10 +289,10 @@ export default function Home() {
 
         return next;
       });
-    }, moveIntervalMs);
+    }, intervalMs);
 
     return () => window.clearInterval(interval);
-  }, [enqueueCrystalTx, isRunning, moveIntervalMs, triggerFlash]);
+  }, [enqueueCrystalTx, isRunning, score, triggerFlash]);
 
   useEffect(() => {
     if (!isRunning) {
@@ -385,6 +383,11 @@ export default function Home() {
     const seconds = timeLeft % 60;
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   }, [timeLeft]);
+
+  const speedMultiplier = useMemo(
+    () => GAME_CONFIG.moveIntervalMs / Math.max(120, GAME_CONFIG.moveIntervalMs - score * 6),
+    [score]
+  );
 
   const timeProgress = useMemo(
     () => (timeLeft / GAME_CONFIG.roundSeconds) * 100,
