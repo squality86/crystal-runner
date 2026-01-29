@@ -86,6 +86,7 @@ export default function Home() {
   const [direction, setDirection] = useState<Direction>("right");
   const [crystals, setCrystals] = useState<Crystal[]>([]);
   const [score, setScore] = useState(0);
+  const [scorePulse, setScorePulse] = useState(false);
   const [timeLeft, setTimeLeft] = useState(GAME_CONFIG.roundSeconds);
   const [isRunning, setIsRunning] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
@@ -220,6 +221,16 @@ export default function Home() {
 
     spawnCrystals();
   }, [hasStarted, spawnCrystals]);
+
+  useEffect(() => {
+    if (!hasStarted) {
+      return;
+    }
+
+    setScorePulse(true);
+    const timeout = window.setTimeout(() => setScorePulse(false), 220);
+    return () => window.clearTimeout(timeout);
+  }, [hasStarted, score]);
 
   useEffect(() => {
     if (!hasStarted) {
@@ -395,7 +406,13 @@ export default function Home() {
         </div>
         <div className={styles.status}>
           <span className={styles.statusLabel}>Crystals</span>
-          <span className={styles.statusValue}>{score}</span>
+          <span
+            className={`${styles.statusValue} ${
+              scorePulse ? styles.pulse : ""
+            }`}
+          >
+            {score}
+          </span>
         </div>
       </header>
 
