@@ -368,6 +368,11 @@ export default function Home() {
     return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   }, [timeLeft]);
 
+  const timeProgress = useMemo(
+    () => (timeLeft / GAME_CONFIG.roundSeconds) * 100,
+    [timeLeft]
+  );
+
   const cellSize = useMemo(
     () => `${100 / GAME_CONFIG.gridSize}%`,
     []
@@ -393,6 +398,13 @@ export default function Home() {
           <span className={styles.statusValue}>{score}</span>
         </div>
       </header>
+
+      <div className={styles.timerBar} aria-hidden="true">
+        <div
+          className={styles.timerFill}
+          style={{ width: `${timeProgress}%` }}
+        />
+      </div>
 
       <div className={styles.walletRow}>
         <div className={styles.walletStatus}>

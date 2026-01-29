@@ -55,6 +55,20 @@
   font-weight: 600;
 }
 
+.timerBar {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.timerFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #7aa9ff, #5dffd0);
+  transition: width 0.3s ease;
+}
+
 .walletRow {
   display: flex;
   flex-wrap: wrap;
