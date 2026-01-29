@@ -110,12 +110,18 @@
 }
 
 .board {
+  --board-hue: 220;
   position: relative;
   width: min(92vw, 420px);
   aspect-ratio: 1 / 1;
   margin: 0 auto;
   border-radius: 18px;
-  background: linear-gradient(160deg, rgba(18, 24, 45, 0.95), rgba(9, 13, 27, 0.95));
+  background: radial-gradient(
+    circle at top,
+    hsl(var(--board-hue) 35% 22%),
+    hsl(var(--board-hue) 35% 12%) 65%,
+    #05070e 100%
+  );
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
   overflow: hidden;

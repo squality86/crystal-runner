@@ -90,6 +90,7 @@ export default function Home() {
   const [isRunning, setIsRunning] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [boardHue, setBoardHue] = useState(() => Math.floor(Math.random() * 360));
   const [flash, setFlash] = useState(false);
   const [status, setStatus] = useState("Connect wallet to record onchain.");
   const [pendingTxCount, setPendingTxCount] = useState(0);
@@ -219,6 +220,17 @@ export default function Home() {
 
     spawnCrystals();
   }, [hasStarted, spawnCrystals]);
+
+  useEffect(() => {
+    if (!hasStarted) {
+      return;
+    }
+
+    const pickHue = () => setBoardHue(Math.floor(Math.random() * 360));
+    pickHue();
+    const interval = window.setInterval(pickHue, 180000);
+    return () => window.clearInterval(interval);
+  }, [hasStarted]);
 
   useEffect(() => {
     if (!isRunning) {
@@ -403,7 +415,12 @@ export default function Home() {
 
       <div
         className={`${styles.board} ${flash ? styles.flash : ""}`}
-        style={{ ["--cell" as string]: cellSize }}
+        style={
+          {
+            ["--cell" as string]: cellSize,
+            ["--board-hue" as string]: String(boardHue),
+          } as React.CSSProperties
+        }
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
