@@ -206,8 +206,12 @@ export default function Home() {
         return current;
       }
 
+      const burst = Math.max(
+        1,
+        Math.ceil(Math.random() * GAME_CONFIG.spawnBurstMax)
+      );
       const spawnCount = Math.min(
-        GAME_CONFIG.spawnBurstMax,
+        burst,
         GAME_CONFIG.maxCrystals - current.length
       );
       return addRandomCrystal(current, runnerRef.current, spawnCount);
