@@ -137,7 +137,7 @@
 }
 
 .board {
-  --board-hue: 34;
+  --board-hue: 78;
   position: relative;
   width: min(92vw, 420px);
   aspect-ratio: 1 / 1;
