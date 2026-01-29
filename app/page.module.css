@@ -294,6 +294,7 @@
   justify-content: space-between;
   font-size: 0.85rem;
   color: rgba(238, 241, 255, 0.6);
+  letter-spacing: 0.02em;
 }
 
 @keyframes crystalPulse {
