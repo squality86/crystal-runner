@@ -149,7 +149,7 @@
     hsl(var(--board-hue) 35% 12%) 65%,
     #05070e 100%
   );
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid hsl(var(--board-hue) 40% 30% / 0.6);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
   overflow: hidden;
 }
