@@ -255,6 +255,7 @@
   display: grid;
   justify-items: center;
   gap: 0.6rem;
+  margin-top: 0.2rem;
 }
 
 .controlsHint {
