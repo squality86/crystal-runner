@@ -97,15 +97,8 @@ export default function Home() {
   const [pendingTxCount, setPendingTxCount] = useState(0);
   const [lastTxHash, setLastTxHash] = useState<string | null>(null);
 
-  const moveIntervalMs = useMemo(
-    () => Math.max(120, GAME_CONFIG.moveIntervalMs - score * 6),
-    [score]
-  );
-
-  const speedMultiplier = useMemo(
-    () => GAME_CONFIG.moveIntervalMs / moveIntervalMs,
-    [moveIntervalMs]
-  );
+  const moveIntervalMs = Math.max(120, GAME_CONFIG.moveIntervalMs - score * 6);
+  const speedMultiplier = GAME_CONFIG.moveIntervalMs / moveIntervalMs;
 
   const directionRef = useRef(direction);
   const runnerRef = useRef(runner);
