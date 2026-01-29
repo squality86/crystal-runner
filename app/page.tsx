@@ -393,6 +393,11 @@ export default function Home() {
     [score]
   );
 
+  const speedMultiplier = useMemo(
+    () => GAME_CONFIG.moveIntervalMs / moveIntervalMs,
+    [moveIntervalMs]
+  );
+
   const cellSize = useMemo(
     () => `${100 / GAME_CONFIG.gridSize}%`,
     []
@@ -558,6 +563,7 @@ export default function Home() {
 
       <footer className={styles.footer}>
         <span>Round: {GAME_CONFIG.roundSeconds / 60} min</span>
+        <span>Speed: x{speedMultiplier.toFixed(2)}</span>
         <span>Network: Base</span>
       </footer>
     </div>
