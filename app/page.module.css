@@ -123,6 +123,7 @@
   padding: 0.6rem 1.2rem;
   border-radius: 999px;
   font-weight: 600;
+  letter-spacing: 0.02em;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
