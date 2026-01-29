@@ -551,6 +551,9 @@ export default function Home() {
             →
           </button>
         </div>
+        <p className={styles.controlsHint}>
+          Swipe or tap arrows to move
+        </p>
       </div>
 
       <footer className={styles.footer}>
