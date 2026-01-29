@@ -427,6 +427,11 @@ export default function Home() {
         <div className={styles.walletStatus}>
           <span className={styles.walletDot} data-ready={isConnected} />
           <span>{status}</span>
+          {pendingTxCount > 0 && (
+            <span className={styles.pendingBadge}>
+              {pendingTxCount} pending
+            </span>
+          )}
         </div>
         {!isConnected && (
           <button
