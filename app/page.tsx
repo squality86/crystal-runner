@@ -247,6 +247,11 @@ export default function Home() {
     return () => window.clearInterval(interval);
   }, [hasStarted]);
 
+  const moveIntervalMs = useMemo(
+    () => Math.max(120, GAME_CONFIG.moveIntervalMs - score * 6),
+    [score]
+  );
+
   useEffect(() => {
     if (!isRunning) {
       return;
@@ -386,11 +391,6 @@ export default function Home() {
   const timeProgress = useMemo(
     () => (timeLeft / GAME_CONFIG.roundSeconds) * 100,
     [timeLeft]
-  );
-
-  const moveIntervalMs = useMemo(
-    () => Math.max(120, GAME_CONFIG.moveIntervalMs - score * 6),
-    [score]
   );
 
   const speedMultiplier = useMemo(
